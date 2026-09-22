@@ -1,4 +1,4 @@
-const repoBasePath = process.env.GITHUB_ACTIONS ? "/Floatr" : "";
+const repoBasePath = process.env.GITHUB_ACTIONS ? "/floatr" : "";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
