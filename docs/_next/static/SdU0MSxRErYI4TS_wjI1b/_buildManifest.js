@@ -9,7 +9,7 @@ self.__BUILD_MANIFEST = {
     "static/chunks/14zm3gpayad5x.js"
   ],
   "/admin": [
-    "static/chunks/2j_11wnou0-ha.js"
+    "static/chunks/1gk2c_r85slge.js"
   ],
   "/help/[roomSlug]": [
     "static/chunks/0rziisgdszdwu.js"

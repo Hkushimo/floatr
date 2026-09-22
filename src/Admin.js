@@ -6,7 +6,12 @@ import { absoluteRoomUrl } from "@/src/routes";
 import { supabase } from "@/src/supabase";
 import { Button, Page, Panel, Select, TextInput } from "@/src/ui";
 
+const ADMIN_SESSION_KEY = "floatr_admin_unlocked";
+const ADMIN_CODE = process.env.NEXT_PUBLIC_ADMIN_CODE || "floatr-admin";
+
 export default function Admin() {
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [adminCode, setAdminCode] = useState("");
   const [data, setData] = useState({ events: [], rooms: [], technicians: [], assignments: [], openRequests: [], allRequests: [] });
   const [eventName, setEventName] = useState("");
   const [roomName, setRoomName] = useState("");
@@ -19,6 +24,11 @@ export default function Admin() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    setIsUnlocked(window.localStorage.getItem(ADMIN_SESSION_KEY) === "true");
+  }, []);
+
+  useEffect(() => {
+    if (!isUnlocked) return;
     load();
     const channel = supabase
       .channel("floatr-admin-open-calls")
@@ -29,7 +39,7 @@ export default function Admin() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [isUnlocked]);
 
   useEffect(() => {
     setRoomSlug(slugify(roomName));
@@ -41,6 +51,24 @@ export default function Admin() {
     } catch (error) {
       setMessage(error.message);
     }
+  }
+
+  function unlockAdmin(event) {
+    event.preventDefault();
+    if (adminCode.trim() !== ADMIN_CODE) {
+      setMessage("Incorrect admin code.");
+      return;
+    }
+    window.localStorage.setItem(ADMIN_SESSION_KEY, "true");
+    setMessage("");
+    setIsUnlocked(true);
+  }
+
+  function lockAdmin() {
+    window.localStorage.removeItem(ADMIN_SESSION_KEY);
+    setIsUnlocked(false);
+    setAdminCode("");
+    setData({ events: [], rooms: [], technicians: [], assignments: [], openRequests: [], allRequests: [] });
   }
 
   async function run(action, done) {
@@ -276,8 +304,34 @@ export default function Admin() {
     <Page title="Admin" subtitle="Live calls first. Setup stays close when the event changes.">
       {message && <div className="notice danger">{message}</div>}
 
-      <div className="stack">
-        <Panel className="command-panel">
+      {!isUnlocked ? (
+        <form className="stack" onSubmit={unlockAdmin}>
+          <Panel>
+            <label className="label" htmlFor="admin-code">
+              Admin code
+            </label>
+            <TextInput
+              id="admin-code"
+              type="password"
+              value={adminCode}
+              onChange={(event) => setAdminCode(event.target.value)}
+              placeholder="Enter admin code"
+              autoComplete="current-password"
+              required
+            />
+          </Panel>
+          <Button type="submit">Unlock admin</Button>
+        </form>
+      ) : (
+        <>
+          <div className="toolbar">
+            <Button type="button" className="ghost" onClick={lockAdmin}>
+              Lock admin
+            </Button>
+          </div>
+
+          <div className="stack">
+            <Panel className="command-panel">
           <div className="section-title">
             <h2>
               <Radio size={19} /> Open Calls
@@ -310,9 +364,9 @@ export default function Admin() {
               );
             })}
           </div>
-        </Panel>
+            </Panel>
 
-        <Panel>
+            <Panel>
           <h2>
             <FileText size={19} /> Show Closeout
           </h2>
@@ -336,10 +390,10 @@ export default function Admin() {
               End show
             </Button>
           </div>
-        </Panel>
+            </Panel>
 
-        <div className="setup-grid">
-          <Panel>
+            <div className="setup-grid">
+              <Panel>
             <h2>
               <CalendarPlus size={19} /> Event
             </h2>
@@ -362,9 +416,9 @@ export default function Admin() {
                 </div>
               ))}
             </div>
-          </Panel>
+              </Panel>
 
-          <Panel>
+              <Panel>
             <h2>
               <DoorOpen size={19} /> Room
             </h2>
@@ -399,9 +453,9 @@ export default function Admin() {
                 </div>
               ))}
             </div>
-          </Panel>
+              </Panel>
 
-          <Panel>
+              <Panel>
             <h2>
               <UserPlus size={19} /> Technician
             </h2>
@@ -428,9 +482,9 @@ export default function Admin() {
                 </div>
               ))}
             </div>
-          </Panel>
+              </Panel>
 
-          <Panel>
+              <Panel>
             <h2>
               <UsersRound size={19} /> Assignment
             </h2>
@@ -473,10 +527,10 @@ export default function Admin() {
                 </div>
               ))}
             </div>
-          </Panel>
-        </div>
+              </Panel>
+            </div>
 
-        <Panel>
+            <Panel>
           <h2>
             <LinkIcon size={19} /> Room QR Codes
           </h2>
@@ -495,8 +549,10 @@ export default function Admin() {
               );
             })}
           </div>
-        </Panel>
-      </div>
+            </Panel>
+          </div>
+        </>
+      )}
     </Page>
   );
 }

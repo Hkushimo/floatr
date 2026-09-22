@@ -18,6 +18,8 @@ Open `http://localhost:3000`.
 3. Use `/admin/` to create an event, rooms, technicians, and room assignments.
 4. Print or display the QR code shown for each room.
 
+The default admin code is `floatr-admin`. Change `NEXT_PUBLIC_ADMIN_CODE` before building if you want a different code.
+
 Attendees use `/help/[roomSlug]` without an account. Technicians log in at `/technician/` with the access code created in admin.
 
 ## GitHub Pages
