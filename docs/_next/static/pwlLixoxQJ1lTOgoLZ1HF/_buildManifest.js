@@ -1,21 +1,21 @@
 self.__BUILD_MANIFEST = {
   "/": [
-    "static/chunks/0f5r2li9gjdcv.js"
+    "static/chunks/0-yzpxt51wkit.js"
   ],
   "/404": [
-    "static/chunks/0ipmr27r0r0nn.js"
+    "static/chunks/11g-_kber0fmk.js"
   ],
   "/_error": [
     "static/chunks/14zm3gpayad5x.js"
   ],
   "/admin": [
-    "static/chunks/1gk2c_r85slge.js"
+    "static/chunks/3rc7lsn1nistf.js"
   ],
   "/help/[roomSlug]": [
-    "static/chunks/0rziisgdszdwu.js"
+    "static/chunks/3eut9cy6yg9_n.js"
   ],
   "/technician": [
-    "static/chunks/37dbvsyklzepn.js"
+    "static/chunks/2fiaq71-hq3zv.js"
   ],
   "__rewrites": {
     "afterFiles": [],

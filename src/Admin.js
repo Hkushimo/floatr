@@ -4,10 +4,11 @@ import { CalendarPlus, DoorOpen, FileText, Link as LinkIcon, Pencil, Power, Radi
 import { fetchAdminData, slugify } from "@/src/data";
 import { absoluteRoomUrl } from "@/src/routes";
 import { supabase } from "@/src/supabase";
-import { Button, Page, Panel, Select, TextInput } from "@/src/ui";
+import { Button, Page, Panel, PinInput, Select, TextInput } from "@/src/ui";
 
 const ADMIN_SESSION_KEY = "floatr_admin_unlocked";
-const ADMIN_CODE = process.env.NEXT_PUBLIC_ADMIN_CODE || "floatr-admin";
+const ADMIN_CODE = process.env.NEXT_PUBLIC_ADMIN_CODE || "0000";
+const toPin = (value) => value.replace(/\D/g, "").slice(0, 4);
 
 export default function Admin() {
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -55,8 +56,8 @@ export default function Admin() {
 
   function unlockAdmin(event) {
     event.preventDefault();
-    if (adminCode.trim() !== ADMIN_CODE) {
-      setMessage("Incorrect admin code.");
+    if (adminCode !== ADMIN_CODE) {
+      setMessage("Incorrect admin PIN.");
       return;
     }
     window.localStorage.setItem(ADMIN_SESSION_KEY, "true");
@@ -108,8 +109,13 @@ export default function Admin() {
 
   async function addTechnician(event) {
     event.preventDefault();
+    const pin = toPin(techCode);
+    if (pin.length !== 4) {
+      setMessage("Technician PIN must be 4 digits.");
+      return;
+    }
     await run(
-      () => supabase.from("technicians").insert({ name: techName.trim(), access_code: techCode.trim() }),
+      () => supabase.from("technicians").insert({ name: techName.trim(), access_code: pin }),
       () => {
         setTechName("");
         setTechCode("");
@@ -157,12 +163,15 @@ export default function Admin() {
   async function editTechnician(technician) {
     const name = window.prompt("Technician name", technician.name);
     if (!name?.trim()) return;
-    const accessCode = window.prompt("Technician access code", technician.access_code);
-    if (!accessCode?.trim()) return;
+    const accessCode = toPin(window.prompt("Technician PIN", technician.access_code) || "");
+    if (accessCode.length !== 4) {
+      setMessage("Technician PIN must be 4 digits.");
+      return;
+    }
     await run(() =>
       supabase
         .from("technicians")
-        .update({ name: name.trim(), access_code: accessCode.trim() })
+        .update({ name: name.trim(), access_code: accessCode })
         .eq("id", technician.id)
     );
   }
@@ -308,15 +317,14 @@ export default function Admin() {
         <form className="stack" onSubmit={unlockAdmin}>
           <Panel>
             <label className="label" htmlFor="admin-code">
-              Admin code
+              Admin PIN
             </label>
-            <TextInput
+            <PinInput
               id="admin-code"
-              type="password"
               value={adminCode}
-              onChange={(event) => setAdminCode(event.target.value)}
-              placeholder="Enter admin code"
-              autoComplete="current-password"
+              onChange={(event) => setAdminCode(toPin(event.target.value))}
+              autoComplete="one-time-code"
+              aria-label="Admin PIN"
               required
             />
           </Panel>
@@ -461,7 +469,13 @@ export default function Admin() {
             </h2>
             <form className="stack small" onSubmit={addTechnician}>
               <TextInput value={techName} onChange={(event) => setTechName(event.target.value)} placeholder="Technician name" required />
-              <TextInput value={techCode} onChange={(event) => setTechCode(event.target.value)} placeholder="Access code" required />
+              <PinInput
+                value={techCode}
+                onChange={(event) => setTechCode(toPin(event.target.value))}
+                autoComplete="one-time-code"
+                aria-label="Technician PIN"
+                required
+              />
               <Button type="submit">Create technician</Button>
             </form>
             <div className="admin-list">

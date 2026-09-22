@@ -58,6 +58,31 @@ export function TextInput(props) {
   return <input className="input" {...props} />;
 }
 
+export function PinInput({ value = "", ...props }) {
+  const slots = Array.from({ length: 4 }, (_, index) => value[index] || "");
+
+  return (
+    <div className="pin-field">
+      <input
+        className="pin-native"
+        type="password"
+        inputMode="numeric"
+        pattern="[0-9]{4}"
+        maxLength={4}
+        value={value}
+        {...props}
+      />
+      <div className="pin-slots" aria-hidden="true">
+        {slots.map((slot, index) => (
+          <span className={`pin-slot ${slot ? "filled" : ""}`} key={index}>
+            {slot ? "•" : ""}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function TextArea(props) {
   return <textarea className="input textarea" {...props} />;
 }

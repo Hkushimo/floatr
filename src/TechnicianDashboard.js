@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, LogOut, Radio, RefreshCcw, UserCheck } from "lucide-react";
 import { fetchOpenRequestsForTechnician } from "@/src/data";
 import { supabase } from "@/src/supabase";
-import { Button, Page, Panel, TextInput, StatusPill } from "@/src/ui";
+import { Button, Page, Panel, PinInput, StatusPill } from "@/src/ui";
 
 const SESSION_KEY = "floatr_technician";
+const toPin = (value) => value.replace(/\D/g, "").slice(0, 4);
 
 export default function TechnicianDashboard() {
   const [session, setSession] = useState(null);
@@ -56,11 +57,11 @@ export default function TechnicianDashboard() {
     const { data, error } = await supabase
       .from("technicians")
       .select("*")
-      .eq("access_code", accessCode.trim())
+      .eq("access_code", accessCode)
       .maybeSingle();
 
     if (error || !data) {
-      setMessage("Could not find that technician code.");
+      setMessage("Could not find that technician PIN.");
       return;
     }
 
@@ -100,18 +101,18 @@ export default function TechnicianDashboard() {
 
   if (!session) {
     return (
-      <Page title="Technician Login" subtitle="Enter the access code from the event admin.">
+      <Page title="Technician Login" subtitle="Enter the 4-digit PIN from the event admin.">
         <form className="stack" onSubmit={login}>
           <Panel>
             <label className="label" htmlFor="code">
-              Technician code
+              Technician PIN
             </label>
-            <TextInput
+            <PinInput
               id="code"
               value={accessCode}
-              onChange={(event) => setAccessCode(event.target.value)}
+              onChange={(event) => setAccessCode(toPin(event.target.value))}
               autoComplete="one-time-code"
-              placeholder="Example: AV-1248"
+              aria-label="Technician PIN"
               required
             />
           </Panel>

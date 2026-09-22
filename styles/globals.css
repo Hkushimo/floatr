@@ -235,6 +235,53 @@ h2 {
   color: #768691;
 }
 
+.pin-field {
+  position: relative;
+  width: min(100%, 252px);
+}
+
+.pin-native {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  opacity: 0.02;
+}
+
+.pin-slots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.pin-slot {
+  display: grid;
+  aspect-ratio: 1;
+  min-height: 54px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--accent-dark);
+  font-size: 1.45rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.pin-field:focus-within .pin-slot {
+  border-color: #355462;
+}
+
+.pin-field:focus-within .pin-slot:first-child:not(.filled),
+.pin-field:focus-within .pin-slot.filled + .pin-slot:not(.filled) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(24, 169, 154, 0.16);
+}
+
 .textarea {
   min-height: 104px;
   resize: vertical;
