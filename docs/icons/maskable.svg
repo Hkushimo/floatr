@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#080d12"/>
+  <circle cx="372" cy="134" r="18" fill="#18a99a"/>
+  <text x="64" y="312" fill="#eef4f7" font-family="Inter, Arial, sans-serif" font-size="108" font-weight="800" letter-spacing="-2">float</text>
+  <text x="332" y="312" fill="#7ee0d5" font-family="Inter, Arial, sans-serif" font-size="108" font-weight="950">r</text>
+</svg>
