@@ -92,17 +92,6 @@ a {
   box-shadow: 0 0 14px rgba(24, 169, 154, 0.78);
 }
 
-.hero-logo {
-  margin-bottom: 16px;
-  font-size: 2.55rem;
-}
-
-.hero-logo .logo-dot {
-  right: -13px;
-  width: 7px;
-  height: 7px;
-}
-
 h1,
 h2,
 p {

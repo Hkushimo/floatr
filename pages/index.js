@@ -1,19 +1,11 @@
 import Link from "next/link";
 import { QrCode, ShieldCheck } from "lucide-react";
-import { Page, Panel, Muted, Logo } from "@/src/ui";
+import { Page, Muted } from "@/src/ui";
 
 export default function Home() {
   return (
     <Page title="Floatr" subtitle="Temporary AV help desk for corporate event rooms.">
       <div className="stack">
-        <Panel>
-          <Logo className="hero-logo" />
-          <h1>Floatr</h1>
-          <p className="lead">
-            Fast room-by-room AV support. Attendees scan a room QR code, technicians see the live queue.
-          </p>
-        </Panel>
-
         <div className="grid-two">
           <Link className="nav-tile" href="/technician/">
             <ShieldCheck size={22} />
