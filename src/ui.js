@@ -1,15 +1,15 @@
 import Link from "next/link";
 
-export function Page({ title, subtitle, children }) {
+export function Page({ title, subtitle, children, logoOnly = false }) {
   return (
     <>
       <title>{title ? `${title} · Floatr` : "Floatr"}</title>
       <main className="page">
         <section className="shell">
           {(title || subtitle) && (
-            <header className="page-header">
-              <Logo />
-              {title && <h1>{title}</h1>}
+            <header className={`page-header ${logoOnly ? "logo-only-header" : ""}`}>
+              <Logo className={logoOnly ? "landing-logo" : ""} />
+              {!logoOnly && title && <h1>{title}</h1>}
               {subtitle && <p>{subtitle}</p>}
             </header>
           )}

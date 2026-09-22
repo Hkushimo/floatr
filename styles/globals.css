@@ -59,6 +59,11 @@ a {
   padding: 8px 2px 20px;
 }
 
+.logo-only-header {
+  padding-top: clamp(26px, 9vh, 72px);
+  padding-bottom: 22px;
+}
+
 .wordmark {
   position: relative;
   display: inline-flex;
@@ -90,6 +95,18 @@ a {
   border-radius: 999px;
   background: var(--accent);
   box-shadow: 0 0 14px rgba(24, 169, 154, 0.78);
+}
+
+.landing-logo {
+  margin-bottom: 12px;
+  font-size: clamp(2.45rem, 11vw, 4.35rem);
+}
+
+.landing-logo .logo-dot {
+  right: -15px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
 }
 
 h1,
@@ -127,6 +144,10 @@ h2 {
 .stack {
   display: grid;
   gap: 12px;
+}
+
+.landing-stack {
+  gap: 10px;
 }
 
 .stack.small {

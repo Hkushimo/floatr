@@ -4,8 +4,8 @@ import { Page, Muted } from "@/src/ui";
 
 export default function Home() {
   return (
-    <Page title="Floatr" subtitle="Temporary AV help desk for corporate event rooms.">
-      <div className="stack">
+    <Page title="Floatr" subtitle="Temporary AV help desk for corporate event rooms." logoOnly>
+      <div className="stack landing-stack">
         <div className="grid-two">
           <Link className="nav-tile" href="/technician/">
             <ShieldCheck size={22} />
